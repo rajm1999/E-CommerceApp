@@ -24,20 +24,20 @@ class FinalizeShoppingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_finalize_shopping)
 
-        var calculateTotalPriceURL = "http://192.168.29.41/OnlineStoreApp/calculate_total_price.php?invoice_num="+ intent.getStringExtra("LATEST_INVOICE_NUMBER")
+        var calculateTotalPriceURL = "http://192.168.29.41/ONLINE_STORE_DB/calculate_total_price.php?invoice_num="+ intent.getStringExtra("LATEST_INVOICE_NUMBER")
         var requestQ = Volley.newRequestQueue(this@FinalizeShoppingActivity)
         var stringRequest = StringRequest(Request.Method.GET , calculateTotalPriceURL ,
-            Response.Listener {
+            {
                 response ->
                 btnPaymentProcessing.text = "Pay $response via PayPal Now!"
                 totalPrice = response.toLong()
-            } , Response.ErrorListener {
+            }, {
                 error ->
                 val dialogBox= AlertDialog.Builder(this)
                 dialogBox.setTitle("Message")
                 dialogBox.setMessage(error.message)
                 dialogBox.create().show()
-            } )
+            })
         requestQ.add(stringRequest)
 
         var paypalConfig: PayPalConfiguration = PayPalConfiguration().

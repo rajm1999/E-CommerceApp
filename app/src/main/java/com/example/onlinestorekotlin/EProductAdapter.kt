@@ -43,11 +43,7 @@ class EProductAdapter(var context: Context, var arrayList: ArrayList<EProduct>) 
             itemView.txtID.text = id.toString()
             itemView.txtName.text= name
             itemView.txtPrice.text = price.toString()
-
-            var picURL="http://192.168.29.41/OnlineStoreApp/RVImages/"
-            //if there is space between words in url
-            picURL = picURL.replace(" ","%20")
-            Picasso.get().load(picURL + picName).into(itemView.imgProduct)
+            Picasso.get().load(picName).into(itemView.imgProduct)
 
             itemView.imgAdd.setOnClickListener {
                 Person.addToCartProductID = id

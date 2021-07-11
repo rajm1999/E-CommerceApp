@@ -79,12 +79,12 @@
         android:ems="10"
         android:textColor="#000" />
     <Button
-        android:id="@+id/sign_up_layout_btnSignUp"
+        android:id="@+id/sign_up_layout_nextbtnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="#000"
-        android:text="SIGN UP"
+        android:text="NEXT"
         />
     <Button
         android:id="@+id/sign_up_layout_btnLogin"

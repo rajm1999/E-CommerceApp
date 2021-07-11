@@ -21,33 +21,33 @@ class FetchEProductsActivity : AppCompatActivity() {
         val selectedBrand = intent.getStringExtra("BRAND")
         txtBrandName.text = "Products of $selectedBrand"
         var productsList = ArrayList<EProduct>()
-        val productsURL ="http://192.168.29.41/OnlineStoreApp/fetch_eproducts.php?brand="+
+        val productsURL ="http://192.168.29.41/ONLINE_STORE_DB/fetch_eproducts.php?brand="+
                                 selectedBrand
         val RequestQ = Volley.newRequestQueue(this@FetchEProductsActivity)
         val jsonAR = JsonArrayRequest(Request.Method.GET,productsURL,null,
-                        Response.Listener { response ->
-                        //Response points to array of jsonObject
+            { response ->
+            //Response points to array of jsonObject
 
-                        for(productJOIndex in 0.until(response.length())){
+            for(productJOIndex in 0.until(response.length())){
 
-                            productsList.add(EProduct(
-                            response.getJSONObject(productJOIndex).getInt("id"),
-                            response.getJSONObject(productJOIndex).getString("name"),
-                            response.getJSONObject(productJOIndex).getInt("price"),
-                            response.getJSONObject(productJOIndex).getString("picture")))
-                        }
-                        val pAdapter =EProductAdapter(this@FetchEProductsActivity,productsList)
-                           productsRV.layoutManager = LinearLayoutManager(this@FetchEProductsActivity)
-                            productsRV.adapter = pAdapter
+                productsList.add(EProduct(
+                response.getJSONObject(productJOIndex).getInt("id"),
+                response.getJSONObject(productJOIndex).getString("name"),
+                response.getJSONObject(productJOIndex).getInt("price"),
+                response.getJSONObject(productJOIndex).getString("picture")))
+            }
+            val pAdapter =EProductAdapter(this@FetchEProductsActivity,productsList)
+               productsRV.layoutManager = LinearLayoutManager(this@FetchEProductsActivity)
+                productsRV.adapter = pAdapter
 
 
-                        },Response.ErrorListener { error ->
-                          val dialogBox= AlertDialog.Builder(this)
-                          dialogBox.setTitle("Message")
-                          dialogBox.setMessage(error.message)
-                           dialogBox.create().show()
-                         })
-                        RequestQ.add(jsonAR)
+            }, { error ->
+              val dialogBox= AlertDialog.Builder(this)
+              dialogBox.setTitle("Message")
+              dialogBox.setMessage(error.message)
+               dialogBox.create().show()
+             })
+        RequestQ.add(jsonAR)
 
         }
 }

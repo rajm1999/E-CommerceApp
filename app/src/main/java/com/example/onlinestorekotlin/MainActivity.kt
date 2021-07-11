@@ -17,13 +17,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         activity_main_btnLogin.setOnClickListener {
-            val loginURL="http://192.168.29.41/OnlineStoreApp/login_app_user.php?email=" +
-                    activity_main_edtEmail.text.toString() + "&pass=" +
-                    activity_main_edtPassword.text.toString()
+            val loginURL = "http://192.168.29.41/ONLINE_STORE_DB/login_user.php"
             val ReqestQ = Volley.newRequestQueue(this@MainActivity)
-            val stringRequest = StringRequest(Request.Method.GET,loginURL,
-                Response.Listener {response ->
-                    if(response.equals("The user does exist")){
+
+            val stringRequest = object : StringRequest(Request.Method.POST, loginURL,
+                Response.Listener { response ->
+                if(response.equals("The user does exist")){
                       //when person login successfully
                        Person.email =activity_main_edtEmail.text.toString()
                         Toast.makeText(this@MainActivity, "Login Successful", Toast.LENGTH_SHORT).show()
@@ -40,11 +39,19 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }, Response.ErrorListener { error ->
-                    val dialogBuilder= AlertDialog.Builder(this)
-                    dialogBuilder.setTitle("Message")
-                    dialogBuilder.setMessage(error.message)
-                    dialogBuilder.create().show()
-                })
+
+                    val alertDialog = AlertDialog.Builder(this)
+                    alertDialog.setTitle("Message")
+                    alertDialog.setMessage(error.message)
+                    alertDialog.create().show()
+                }) {
+                override fun getParams(): MutableMap<String, String> {
+                    val params = HashMap<String, String>()
+                    params["email"] = activity_main_edtEmail.text.toString();
+                    params["password"] = activity_main_edtPassword.text.toString();
+                    return params;
+                }
+            }
             ReqestQ.add(stringRequest)
         }
 

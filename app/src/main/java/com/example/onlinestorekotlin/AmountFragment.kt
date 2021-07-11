@@ -34,23 +34,22 @@ class AmountFragment : androidx.fragment.app.DialogFragment() {
 
         btnAddToCart.setOnClickListener {
 
-            var productURL = "http://192.168.29.41/OnlineStoreApp/insert_temporary_order.php?email="+
+            var productURL = "http://192.168.29.41/ONLINE_STORE_DB/insert_temporary_order.php?email="+
                             Person.email +"&product_id="+ Person.addToCartProductID +
                             "&amount=" + edtEnterAmount.text.toString()
             var RequestQ = Volley.newRequestQueue(activity)
             var stringRequest = StringRequest(Request.Method.GET,productURL,
-                        Response.Listener {
-                        response ->
-                          var intent = Intent(activity, CartProductsActivity :: class.java)
-                            startActivity(intent)
-
-                        }, Response.ErrorListener {
-                        error ->
-                            var DialogBox= AlertDialog.Builder(activity)
-                            DialogBox.setTitle("Message")
-                            DialogBox.setMessage(error.message)
-                            DialogBox.create().show()
-                        })
+                {
+                response ->
+                  var intent = Intent(activity, CartProductsActivity :: class.java)
+                    startActivity(intent)
+                }, {
+                error ->
+                    var DialogBox= AlertDialog.Builder(activity)
+                    DialogBox.setTitle("Message")
+                    DialogBox.setMessage(error.message)
+                    DialogBox.create().show()
+                })
             RequestQ.add(stringRequest)
         }
         return fragmentView

@@ -17,47 +17,50 @@ class SignUpLayout : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up_layout)
 
-        sign_up_layout_btnSignUp.setOnClickListener {
+        sign_up_layout_nextbtnSignUp.setOnClickListener {
 
             if (sign_up_layout_edtPassword.text.toString().
                     equals(sign_up_layout_edtConfirmPassword.text.toString())){
 
                 //Registration Process
-                val signupURL="http://192.168.29.41/OnlineStoreApp/join_new_user.php?email="+
-                            sign_up_layout_edtEmail.text.toString()+
-                      "&username=" + sign_up_layout_edtUsername.text.toString()+
-                        "&pass="+ sign_up_layout_edtPassword.text.toString()
-
+                val signupURL="http://192.168.29.41/ONLINE_STORE_DB/signup_user.php";
                 val requestQ = Volley.newRequestQueue(this@SignUpLayout)
-                val stringRequest =StringRequest(Request.Method.GET,signupURL,
-                 Response.Listener { response ->
+                val stringRequest =object:StringRequest(Request.Method.POST,signupURL,
+                    Response.Listener{ response ->
 
-                     if(response.equals("A user with this Email Address already exists")){
+                    if(response.equals("A user with this Email Address already exists")){
 
-                          val dialogBuilder = AlertDialog.Builder(this)
-                          dialogBuilder.setTitle("Message")
-                          dialogBuilder.setMessage(response)
-                          dialogBuilder.create().show()
+                             val dialogBuilder = AlertDialog.Builder(this)
+                             dialogBuilder.setTitle("Message")
+                             dialogBuilder.setMessage(response)
+                             dialogBuilder.create().show()
 
-                     } else{
-                          //when user signed up successfully
-                         Person.email = sign_up_layout_edtEmail.text.toString()
-                         Toast.makeText(this@SignUpLayout,
-                             "Congrats ${sign_up_layout_edtUsername.text.toString()} Signed Up Successfully",
-                                Toast.LENGTH_SHORT).show()
-                         val homeIntent = Intent(this@SignUpLayout, HomeScreen::class.java)
-                         startActivity(homeIntent)
+                        } else{
+                             //when user signed up successfully
+                            Person.email = sign_up_layout_edtEmail.text.toString()
+                            Toast.makeText(this@SignUpLayout,
+                                "Congrats ${sign_up_layout_edtUsername.text.toString()} Signed Up Successfully",
+                                   Toast.LENGTH_SHORT).show()
+                            val homeIntent = Intent(this@SignUpLayout, HomeScreen::class.java)
+                            startActivity(homeIntent)
 
-                        }
+                           }
 
-                   }, Response.ErrorListener { error ->
+                      }, Response.ErrorListener{ error ->
 
                         val alertDialog = AlertDialog.Builder(this)
                         alertDialog.setTitle("Message")
                         alertDialog.setMessage(error.message)
                         alertDialog.create().show()
-                })
-
+                    }){
+                    override fun getParams(): MutableMap<String , String> {
+                        val params = HashMap<String,String>()
+                        params["email"]=sign_up_layout_edtEmail.text.toString();
+                        params["username"]=sign_up_layout_edtUsername.text.toString();
+                        params["password"]=sign_up_layout_edtPassword.text.toString();
+                        return params;
+                    }
+                }
             requestQ.add(stringRequest)
 
             } else {
@@ -68,8 +71,8 @@ class SignUpLayout : AppCompatActivity() {
             }
         }
         sign_up_layout_btnLogin.setOnClickListener {
-//            val loginIntent = Intent(this@SignUpLayout, MainActivity ::class.java)
-//            startActivity(loginIntent)
+            val loginIntent = Intent(this@SignUpLayout, MainActivity ::class.java)
+            startActivity(loginIntent)
            //to get back to the login layout
             finish()
         }

@@ -17,7 +17,7 @@ class HomeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
 
-        var brandsURL= "http://192.168.29.41/OnlineStoreApp/fetch_brands.php"
+        var brandsURL= "http://192.168.29.41/ONLINE_STORE_DB/fetch_brands.php"
         //brandsList contains all the brands that we get from the server
         var brandsList= ArrayList<String>()
 
@@ -25,24 +25,24 @@ class HomeScreen : AppCompatActivity() {
         //As we want array of json Objects so we need to create an array of
         //JSONArrayRequest
         var jsonAR = JsonArrayRequest(Request.Method.GET , brandsURL,null,
-                       Response.Listener { response ->
-                        //in this we populate our brandsList with
-                        //the JSONobjects that we get from the server
-                        for(jsonObject in 0.until(response.length())) {
-                          brandsList.add(response.getJSONObject(jsonObject).getString("brand"))
-                        }
-                        //as we require an adapter that's play the role of the controller
-                         var brandsListAdapter = ArrayAdapter(this@HomeScreen ,
-                                                 R.layout.brand_item_text_view , brandsList)
+            { response ->
+             //in this we populate our brandsList with
+             //the JSONobjects that we get from the server
+             for(jsonObject in 0.until(response.length())) {
+               brandsList.add(response.getJSONObject(jsonObject).getString("brand"))
+             }
+             //as we require an adapter that's play the role of the controller
+              var brandsListAdapter = ArrayAdapter(this@HomeScreen ,
+                                      R.layout.brand_item_text_view , brandsList)
 
-                          brandsListView.adapter = brandsListAdapter
+               brandsListView.adapter = brandsListAdapter
 
-                       },Response.ErrorListener { error ->
-                        val dialogBuilder = AlertDialog.Builder(this)
-                        dialogBuilder.setTitle("Message")
-                        dialogBuilder.setMessage(error.message)
-                        dialogBuilder.create().show()
-                        } )
+            }, { error ->
+             val dialogBuilder = AlertDialog.Builder(this)
+             dialogBuilder.setTitle("Message")
+             dialogBuilder.setMessage(error.message)
+             dialogBuilder.create().show()
+             })
 
         RequestQ.add(jsonAR)
 
